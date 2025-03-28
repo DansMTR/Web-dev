@@ -1,0 +1,59 @@
+.form {
+  border: solid;
+  height: 70%;
+  width: 70%;
+  margin: auto;
+  margin-top: 40px;
+  border-radius: 9px;
+  position: relative;
+  padding-bottom:70px;
+    
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 60px;
+  margin-top: 30px;
+}
+
+p {
+  margin-left: 10px;
+}
+#Signup{
+padding-bottom:40px;
+}
+
+input {
+  margin: 40px 10px;
+  width: 90%;
+  border-radius: 9px;
+  padding: 10px;
+  position: relative;
+ 
+}
+
+button {
+  display: block;
+  float: center;
+  position: absolute;
+    margin-left:40px;
+    margin-top:10px;
+        margin-bottom:10px;
+    padding-right: 40%;
+  padding-left: 40%;
+     padding-top:12px;
+    padding-bottom:12px;
+    border-radius:9px;
+   
+}
+
+
+
+#icon {
+ height: 30px;
+  width: 20px;
+  cursor: pointer;
+  display:inline-block;
+  position: relative;  
+  transform: translate(-55px, 10px);
+}

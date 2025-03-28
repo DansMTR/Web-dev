@@ -1,0 +1,159 @@
+
+body
+{
+    background-color:#040F0F;
+}
+
+.main-content{
+    background-image: url('GTA.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-bottom: 500px;
+}
+
+#navbar {
+    background-color: #333;
+    overflow: hidden;
+    position: fixed;
+    width:100%;
+    top :0%;
+}
+
+#navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+
+
+
+.active {
+    background-color: #4CAF50;
+}
+
+
+.secondary-content{
+    background-color:white;
+}
+
+.main-image {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.main-image p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.secondary-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.secondary-content p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+
+.footer {
+    padding-top:200px;
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+}
+hr{
+    color:#4CAF50;
+}
+
+
+.paragraph-container {
+  
+ margin: 50px 50px;
+color: white;
+text-align: left;
+
+
+  }
+
+
+.text-container
+{   padding-top:10px;
+    padding-left:20px;
+ border:2px solid #4CAF50 ;
+    border-radius: 8px;
+    height: 450px;
+
+}
+.image-container-right {
+ float: right;    
+ margin-top: 20px;
+ margin-right:20px;
+
+ 
+}
+
+.image-container-left {
+  float: left;
+  padding-right: 100px;
+  margin-top: 20px;
+   margin-left:20px;
+   
+}
+
+
+#gta5{
+        height: 400px;
+  width: 600px;
+}
+#gta4{
+     height: 400px;
+  width: 600px;
+}
+#gta3{
+    height: 400px;
+  width: 600px;
+ 
+}
+
+
+#gtasa{
+     height: 400px;
+  width: 600px;
+}
+#gtavc
+{
+    height: 400px;
+  width: 600px;
+}
+a.button {
+  display: inline-block;
+  padding: 1em 2em;
+  background-color: #040F0F;
+  color: white;
+  border: 2px solid #4CAF50;
+  border-radius: 0.25em;
+   text-decoration: none;
+  
+  margin-top: 5em;
+}
+
+a.button:hover {
+  background-color: #4CAF50;
+  box-shadow: 0 0 20px #4CAF50;
+}
+
+
