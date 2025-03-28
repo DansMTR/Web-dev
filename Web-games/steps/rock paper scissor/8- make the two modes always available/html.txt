@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors - Game Modes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Rock, Paper, Scissors</h1>
+
+    <!-- Mode Selection -->
+    <h2>Select Game Mode:</h2>
+    <button id="pvp-mode">Two Player Mode</button>
+    <button id="pvc-mode">Play vs Computer</button>
+
+    <!-- Instructions -->
+    <h3 id="turn-info">Choose a mode to start!</h3>
+
+    <!-- Buttons for choices -->
+    <div id="game-area" style="display: none;">
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissors">Scissors</button>
+
+        <!-- Display player choices -->
+        <h2>Player 1's Choice: <span id="player1-choice">?</span></h2>
+        <h2 id="player2-label">Player 2's Choice: <span id="player2-choice">?</span></h2>
+        <h2 id="result-label">Result: <span id="result">?</span></h2>
+
+        <!-- Scoreboard -->
+        <h2>Score</h2>
+        <p>Player 1: <span id="player1-score">0</span></p>
+        <p id="player2-score-label">Player 2: <span id="player2-score">0</span></p>
+
+        <!-- Reset Button -->
+        <button id="reset">Reset Game</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

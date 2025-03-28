@@ -1,0 +1,6 @@
+Edit the code of a whack-a-mole project by adding a score display in the HTML. Implement a whack() function in JavaScript to increase the score when a mole is clicked. Add event listeners to each mole to trigger the whack() function on click, updating the score dynamically.
+
+
+
+
+

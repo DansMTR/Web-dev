@@ -1,0 +1,20 @@
+Basic Structure & Functionality
+Create the Basic HTML Structure – Set up the HTML file with a title, heading, and a button to roll the dice.
+Style the Game with CSS – Design the layout using CSS to make it visually appealing. Center elements and add basic styling.
+Implement the Dice Roll Functionality – Write JavaScript to generate a random number between 1 and 6 when the button is clicked.
+Display a Dice Image Based on the Roll – Use images to show the corresponding dice face when a number is rolled.
+
+Enhancing the Game
+Add a Score System – Track and display the total score of the player.
+Create a Reset Button – Allow the player to reset the game and start fresh.
+Add a Two-Player Mode – Implement a turn-based system where two players take turns rolling the dice.
+Highlight the Active Player – Visually indicate whose turn it is using CSS changes.
+
+Adding More Features
+Implement Winning Conditions – Set a score limit (e.g., first to 50 wins) and display a winner message.
+Add Animations – Animate the dice roll using CSS or JavaScript for a more interactive feel.
+Play Sound Effects – Add a dice roll sound when the button is clicked.
+Allow Dice Roll with Keyboard Input – Enable pressing the "Spacebar" to roll the dice instead of clicking.
+Add a Dark Mode Toggle – Allow the user to switch between light and dark mode.
+Make It Mobile-Friendly – Adjust the layout to work well on small screens using responsive design.
+Store High Scores in Local Storage – Save the highest score so players can compete against previous records.

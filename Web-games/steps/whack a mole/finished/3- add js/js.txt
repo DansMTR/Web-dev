@@ -1,0 +1,78 @@
+// Select all moles and holes
+const holes = document.querySelectorAll('.hole');
+const moles = document.querySelectorAll('.mole');
+const startButton = document.getElementById('start-button');
+let isGameRunning = false;
+let gameTimeout;
+let lastHole;
+
+// Function to get a random hole (but not the same one twice in a row)
+function getRandomHole() {
+    const index = Math.floor(Math.random() * holes.length);
+    const hole = holes[index];
+    
+    // Avoid the same hole twice in a row
+    if (hole === lastHole) {
+        return getRandomHole();
+    }
+    
+    lastHole = hole;
+    return hole;
+}
+
+// Function to make a random mole appear
+function showRandomMole() {
+    // Only run if game is active
+    if (!isGameRunning) return;
+    
+    // Get a random hole
+    const hole = getRandomHole();
+    const mole = hole.querySelector('.mole');
+    
+    // Make the mole appear
+    mole.classList.add('up');
+    
+    // Set a timeout to hide the mole again
+    const hideTime = Math.random() * 1000 + 600; // Between 600ms and 1600ms
+    setTimeout(() => {
+        mole.classList.remove('up');
+        // If game is still running, show another mole
+        if (isGameRunning) {
+            showRandomMole();
+        }
+    }, hideTime);
+}
+
+// Function to handle whacking a mole
+function whack() {
+    if (!isGameRunning) return;
+    
+    // Visual feedback that mole was hit
+    this.classList.remove('up');
+    
+    // Prevent multiple clicks on the same mole
+    this.style.pointerEvents = 'none';
+    setTimeout(() => {
+        this.style.pointerEvents = 'auto';
+    }, 300);
+}
+
+// Start game function
+function startGame() {
+    isGameRunning = true;
+    startButton.disabled = true;
+    
+    // Start showing moles
+    showRandomMole();
+    
+    // Set game length (e.g., 30 seconds)
+    gameTimeout = setTimeout(() => {
+        isGameRunning = false;
+        startButton.disabled = false;
+        alert('Game over!');
+    }, 30000);
+}
+
+// Add event listeners
+startButton.addEventListener('click', startGame);
+moles.forEach(mole => mole.addEventListener('click', whack));

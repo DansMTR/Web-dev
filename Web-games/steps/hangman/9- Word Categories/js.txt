@@ -1,0 +1,264 @@
+// Select all moles and holes
+const holes = document.querySelectorAll('.hole');
+const moles = document.querySelectorAll('.mole');
+const startButton = document.getElementById('start-button');
+const scoreDisplay = document.getElementById('score');
+const timerDisplay = document.getElementById('timer');
+const gameOverScreen = document.getElementById('game-over-screen');
+const retryButton = document.getElementById('retry-button');
+const finalTimeDisplay = document.getElementById('final-time');
+const historyContainer = document.getElementById('history-container');
+let score = 0;
+let isGameRunning = false;
+let isPaused = false;
+let gameTimeout;
+let lastHole;
+let timerInterval;
+let gameTime = 0;
+let gameCount = 0;
+let scoreHistory = [];
+let remainingTime = 30000; // 30 seconds in milliseconds
+let pauseStartTime;
+
+// Create the pause button
+const pauseButton = document.createElement('button');
+pauseButton.id = 'pause-button';
+pauseButton.textContent = 'Pause';
+pauseButton.disabled = true;
+
+// Add the pause button to the game info section
+document.querySelector('.game-info').appendChild(pauseButton);
+
+// Update the history display
+function updateHistoryDisplay() {
+    // Clear the history container
+    historyContainer.innerHTML = '';
+    
+    if (scoreHistory.length === 0) {
+        historyContainer.innerHTML = '<p class="empty-history">No games played yet</p>';
+        return;
+    }
+    
+    // Add each history entry
+    scoreHistory.forEach((entry, index) => {
+        const historyEntry = document.createElement('div');
+        historyEntry.className = 'history-entry';
+        historyEntry.innerHTML = `
+            <p class="entry-number">Game #${entry.gameNumber}</p>
+            <p class="entry-score">Score: ${entry.score}</p>
+            <p class="entry-time">Time: ${entry.time}</p>
+        `;
+        historyContainer.appendChild(historyEntry);
+    });
+    
+    // Scroll to the bottom to show the latest entry
+    historyContainer.scrollTop = historyContainer.scrollHeight;
+}
+
+// Function to get a random hole (but not the same one twice in a row)
+function getRandomHole() {
+    const index = Math.floor(Math.random() * holes.length);
+    const hole = holes[index];
+    
+    // Avoid the same hole twice in a row
+    if (hole === lastHole) {
+        return getRandomHole();
+    }
+    
+    lastHole = hole;
+    return hole;
+}
+
+// Function to make a random mole appear
+function showRandomMole() {
+    // Only run if game is active and not paused
+    if (!isGameRunning || isPaused) return;
+    
+    // Get a random hole
+    const hole = getRandomHole();
+    const mole = hole.querySelector('.mole');
+    
+    // Make the mole appear
+    mole.classList.add('up');
+    
+    // Set a timeout to hide the mole again
+    const hideTime = Math.random() * 1000 + 600; // Between 600ms and 1600ms
+    setTimeout(() => {
+        mole.classList.remove('up');
+        // If game is still running and not paused, show another mole
+        if (isGameRunning && !isPaused) {
+            showRandomMole();
+        }
+    }, hideTime);
+}
+
+// Function to update the timer display
+function updateTimer() {
+    if (isPaused) return;
+    
+    gameTime++;
+    const seconds = gameTime % 60;
+    const minutes = Math.floor(gameTime / 60);
+    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Function to handle whacking a mole
+function whack(e) {
+    if (!isGameRunning || isPaused) return;
+    
+    // Stop the event from bubbling up to the hole
+    e.stopPropagation();
+    
+    score++;
+    scoreDisplay.textContent = score;
+    
+    // Visual feedback that mole was hit
+    this.classList.remove('up');
+    
+    // Prevent multiple clicks on the same mole
+    this.style.pointerEvents = 'none';
+    setTimeout(() => {
+        this.style.pointerEvents = 'auto';
+    }, 300);
+}
+
+// Function to handle clicking on a hole
+function clickHole(e) {
+    if (!isGameRunning || isPaused) return;
+    
+    // Only trigger game over if clicking directly on the hole (not on a mole)
+    // Check if the click target is the hole element itself or a child that's not a mole
+    const clickedElement = e.target;
+    const moleElement = this.querySelector('.mole');
+    
+    if (clickedElement !== moleElement && !moleElement.classList.contains('up')) {
+        endGame();
+    }
+}
+
+// Function to end the game
+function endGame() {
+    isGameRunning = false;
+    isPaused = false;
+    
+    // Clear any pending timeouts and intervals
+    clearTimeout(gameTimeout);
+    clearInterval(timerInterval);
+    
+    // Format the final time
+    const finalTime = timerDisplay.textContent;
+    
+    // Show game over screen
+    document.getElementById('final-score').textContent = score;
+    finalTimeDisplay.textContent = finalTime;
+    gameOverScreen.classList.add('visible');
+    
+    // Add to score history
+    gameCount++;
+    scoreHistory.push({
+        gameNumber: gameCount,
+        score: score,
+        time: finalTime
+    });
+    
+    // Keep only the last 20 games per session
+    if (scoreHistory.length > 20) {
+        scoreHistory.shift();
+    }
+    
+    // Update history display
+    updateHistoryDisplay();
+    
+    // Reset buttons
+    startButton.disabled = false;
+    pauseButton.disabled = true;
+    pauseButton.textContent = 'Pause';
+}
+
+// Function to toggle pause/resume game
+function togglePause() {
+    if (!isGameRunning) return;
+    
+    if (isPaused) {
+        // Resume game
+        isPaused = false;
+        pauseButton.textContent = 'Pause';
+        
+        // Restart the timer
+        timerInterval = setInterval(updateTimer, 1000);
+        
+        // Calculate remaining time
+        const pauseDuration = Date.now() - pauseStartTime;
+        remainingTime -= pauseDuration;
+        
+        // Resume mole appearances
+        showRandomMole();
+        
+        // Resume game timeout
+        gameTimeout = setTimeout(() => {
+            endGame();
+        }, remainingTime);
+    } else {
+        // Pause game
+        isPaused = true;
+        pauseButton.textContent = 'Resume';
+        
+        // Pause the timer
+        clearInterval(timerInterval);
+        
+        // Record when we paused
+        pauseStartTime = Date.now();
+        
+        // Clear timeout
+        clearTimeout(gameTimeout);
+        
+        // Hide any visible moles
+        moles.forEach(mole => {
+            mole.classList.remove('up');
+        });
+    }
+}
+
+// Start game function
+function startGame() {
+    // Hide game over screen if visible
+    gameOverScreen.classList.remove('visible');
+    
+    // Reset score and timer
+    score = 0;
+    gameTime = 0;
+    isPaused = false;
+    remainingTime = 30000; // Reset to 30 seconds
+    scoreDisplay.textContent = score;
+    timerDisplay.textContent = "00:00";
+    
+    isGameRunning = true;
+    startButton.disabled = true;
+    pauseButton.disabled = false;
+    pauseButton.textContent = 'Pause';
+    
+    // Start the timer
+    timerInterval = setInterval(updateTimer, 1000);
+    
+    // Start showing moles
+    showRandomMole();
+    
+    // Set game length (e.g., 30 seconds)
+    gameTimeout = setTimeout(() => {
+        endGame();
+    }, remainingTime);
+}
+
+// Add event listeners
+startButton.addEventListener('click', startGame);
+retryButton.addEventListener('click', startGame);
+pauseButton.addEventListener('click', togglePause);
+moles.forEach(mole => mole.addEventListener('click', whack));
+holes.forEach(hole => hole.addEventListener('click', clickHole));
+
+// Initialize the empty history when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    scoreHistory = [];
+    gameCount = 0;
+    updateHistoryDisplay();
+});

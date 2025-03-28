@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Guessing Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Word Guessing Game</h1>
+        
+        <div id="attempts-left">Attempts left: <span id="attempts">6</span></div>
+        
+        <div id="word-display">
+            <!-- Word with underscores will be displayed here -->
+        </div>
+        
+        <div id="game-status">
+            <!-- Game status messages will be displayed here -->
+        </div>
+        
+        <div id="alphabet">
+            <!-- Alphabet buttons will be generated here -->
+        </div>
+        
+        <button id="new-game-btn">New Game</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+            const alphabetContainer = document.getElementById('alphabet');
+            
+            for (let letter of alphabet) {
+                const button = document.createElement('button');
+                button.className = 'letter-btn';
+                button.textContent = letter.toUpperCase();
+                button.dataset.letter = letter;
+                alphabetContainer.appendChild(button);
+            }
+            
+            const wordDisplay = document.getElementById('word-display');
+            wordDisplay.textContent = '_ _ _ _ _';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Edit the code of a dice roller project by adding two CSS classes, highlight-player1 and highlight-player2, to visually highlight the current player's name with different colors. Implement JavaScript to dynamically update the class based on whose turn it is, highlighting Player 1 in green (highlight-player1) and Player 2 in blue (highlight-player2).

@@ -1,0 +1,1 @@
+Edit the code of a dice roller project to add a winning condition where the first player to reach 20 points wins . Implement JavaScript to display a winner message when a player reaches the target score and stop the game to prevent further rolls. Update the Reset button to clear the winner message, reset scores, and restart the game.

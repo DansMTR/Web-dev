@@ -1,0 +1,1 @@
+Edit the code of a dice roller project by adding a Game History section  that tracks and displays every dice roll for each player . Implement auto-scrolling to ensure the latest roll is always visible .

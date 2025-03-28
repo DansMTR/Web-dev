@@ -1,0 +1,135 @@
+// Get elements
+const player1ChoiceDisplay = document.getElementById("player1-choice");
+let player2ChoiceDisplay = document.getElementById("player2-choice"); // Changed to let
+const resultDisplay = document.getElementById("result");
+const player1ScoreDisplay = document.getElementById("player1-score");
+let player2ScoreDisplay = document.getElementById("player2-score"); // Changed to let
+const turnInfo = document.getElementById("turn-info");
+const resetButton = document.getElementById("reset");
+const gameArea = document.getElementById("game-area");
+const player2Label = document.getElementById("player2-label");
+const player2ScoreLabel = document.getElementById("player2-score-label");
+const resultLabel = document.getElementById("result-label");
+
+// Mode buttons
+const pvpModeButton = document.getElementById("pvp-mode");
+const pvcModeButton = document.getElementById("pvc-mode");
+
+const choices = ["Rock", "Paper", "Scissors"];
+let player1Choice = "";
+let player2Choice = "";
+let player1Score = 0;
+let player2Score = 0;
+let currentPlayer = 1; // Start with Player 1
+let gameMode = ""; // "PvP" or "PvC"
+
+// Mode selection event listeners
+pvpModeButton.addEventListener("click", () => startGame("PvP"));
+pvcModeButton.addEventListener("click", () => startGame("PvC"));
+
+// Game buttons event listeners
+document.getElementById("paper").addEventListener("click", () => makeChoice("Paper"));
+document.getElementById("rock").addEventListener("click", () => makeChoice("Rock"));
+document.getElementById("scissors").addEventListener("click", () => makeChoice("Scissors"));
+resetButton.addEventListener("click", resetGame);
+
+// Function to start the game in the selected mode
+function startGame(mode) {
+    gameMode = mode;
+    gameArea.style.display = "block";
+    resetGame(); // Reset scores and choices
+    
+    if (mode === "PvP") {
+        turnInfo.textContent = "Player 1, make your choice!";
+        
+        // Fix: Use innerHTML for player2Label to preserve the choice span
+        player2Label.innerHTML = "Player 2's Choice: <span id='player2-choice'>?</span>";
+        // Get a fresh reference to the choice span
+        player2ChoiceDisplay = document.getElementById("player2-choice");
+        
+        // Fix: Use innerHTML for player2ScoreLabel to preserve the score span
+        player2ScoreLabel.innerHTML = "Player 2: <span id='player2-score'>0</span>";
+        // Get a fresh reference to the score span
+        player2ScoreDisplay = document.getElementById("player2-score");
+    } else {
+        turnInfo.textContent = "Player 1, make your choice!";
+        
+        // Fix: Use innerHTML for player2Label to preserve the choice span
+        player2Label.innerHTML = "Computer's Choice: <span id='player2-choice'>?</span>";
+        // Get a fresh reference to the choice span
+        player2ChoiceDisplay = document.getElementById("player2-choice");
+        
+        // Fix: Use innerHTML for player2ScoreLabel to preserve the score span
+        player2ScoreLabel.innerHTML = "Computer: <span id='player2-score'>0</span>";
+        // Get a fresh reference to the score span
+        player2ScoreDisplay = document.getElementById("player2-score");
+    }
+}
+
+// Function to handle player choices
+function makeChoice(choice) {
+    if (gameMode === "PvP") {
+        if (currentPlayer === 1) {
+            player1Choice = choice;
+            player1ChoiceDisplay.textContent = "❔"; // Hide Player 1's choice
+            turnInfo.textContent = "Player 2, make your choice!";
+            currentPlayer = 2; // Switch to Player 2
+        } else {
+            player2Choice = choice;
+            player2ChoiceDisplay.textContent = player2Choice;
+            player1ChoiceDisplay.textContent = player1Choice; // Reveal Player 1's choice
+            determineWinner();
+        }
+    } else if (gameMode === "PvC") {
+        player1Choice = choice;
+        player1ChoiceDisplay.textContent = player1Choice;
+        player2Choice = choices[Math.floor(Math.random() * choices.length)]; // Random computer choice
+        player2ChoiceDisplay.textContent = player2Choice;
+        determineWinner();
+    }
+}
+
+// Function to determine winner
+function determineWinner() {
+    let result;
+
+    if (player1Choice === player2Choice) {
+        result = "It's a Draw!";
+    } else if (
+        (player1Choice === "Rock" && player2Choice === "Scissors") ||
+        (player1Choice === "Paper" && player2Choice === "Rock") ||
+        (player1Choice === "Scissors" && player2Choice === "Paper")
+    ) {
+        result = "Player 1 Wins!";
+        player1Score++;
+    } else {
+        result = gameMode === "PvP" ? "Player 2 Wins!" : "Computer Wins!";
+        
+        // Increment Player 2's or Computer's score
+        player2Score++;  
+    }
+
+    // Update result and scores in the UI
+    resultDisplay.textContent = result;
+    player1ScoreDisplay.textContent = player1Score;
+    player2ScoreDisplay.textContent = player2Score; // Now this should work correctly
+
+    // Reset for next round
+    currentPlayer = 1;
+    turnInfo.textContent = "Player 1, make your choice!";
+}
+
+// Function to reset the game
+function resetGame() {
+    player1Score = 0;
+    player2Score = 0;
+    player1Choice = "";
+    player2Choice = "";
+    player1ChoiceDisplay.textContent = "?";
+    player2ChoiceDisplay.textContent = "?";
+    resultDisplay.textContent = "?";
+    player1ScoreDisplay.textContent = "0";
+    player2ScoreDisplay.textContent = "0";
+    turnInfo.textContent = "Player 1, make your choice!";
+    currentPlayer = 1;
+}

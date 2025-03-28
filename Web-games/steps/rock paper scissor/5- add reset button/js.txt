@@ -1,0 +1,58 @@
+// Get elements
+const playerChoiceDisplay = document.getElementById("player-choice");
+const computerChoiceDisplay = document.getElementById("computer-choice");
+const resultDisplay = document.getElementById("result");
+const playerScoreDisplay = document.getElementById("player-score");
+const computerScoreDisplay = document.getElementById("computer-score");
+const resetButton = document.getElementById("reset");
+
+const choices = ["Rock", "Paper", "Scissors"];
+let playerScore = 0;
+let computerScore = 0;
+
+// Get buttons and add event listeners
+document.getElementById("paper").addEventListener("click", () => playGame("Paper"));
+document.getElementById("rock").addEventListener("click", () => playGame("Rock"));
+document.getElementById("scissors").addEventListener("click", () => playGame("Scissors"));
+resetButton.addEventListener("click", resetGame);
+
+// Function to play the game
+function playGame(playerChoice) {
+    playerChoiceDisplay.textContent = playerChoice;
+
+    // Random choice for the computer
+    const computerChoice = choices[Math.floor(Math.random() * 3)];
+    computerChoiceDisplay.textContent = computerChoice;
+
+    // Determine the winner
+    let result;
+    if (playerChoice === computerChoice) {
+        result = "It's a Draw!";
+    } else if (
+        (playerChoice === "Rock" && computerChoice === "Scissors") ||
+        (playerChoice === "Paper" && computerChoice === "Rock") ||
+        (playerChoice === "Scissors" && computerChoice === "Paper")
+    ) {
+        result = "You Win!";
+        playerScore++;
+    } else {
+        result = "Computer Wins!";
+        computerScore++;
+    }
+
+    // Update result and scores
+    resultDisplay.textContent = result;
+    playerScoreDisplay.textContent = playerScore;
+    computerScoreDisplay.textContent = computerScore;
+}
+
+// Function to reset the game
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    playerChoiceDisplay.textContent = "?";
+    computerChoiceDisplay.textContent = "?";
+    resultDisplay.textContent = "?";
+    playerScoreDisplay.textContent = "0";
+    computerScoreDisplay.textContent = "0";
+}

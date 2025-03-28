@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors - Two Player Mode</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Rock, Paper, Scissors - Two Player Mode</h1>
+    
+    <!-- Instructions -->
+    <h3 id="turn-info">Player 1, make your choice!</h3>
+
+    <!-- Buttons for choices -->
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+
+    <!-- Display player choices -->
+    <h2>Player 1's Choice: <span id="player1-choice">?</span></h2>
+    <h2>Player 2's Choice: <span id="player2-choice">?</span></h2>
+    <h2>Result: <span id="result">?</span></h2>
+
+    <!-- Scoreboard -->
+    <h2>Score</h2>
+    <p>Player 1: <span id="player1-score">0</span></p>
+    <p>Player 2: <span id="player2-score">0</span></p>
+
+    <!-- Reset Button -->
+    <button id="reset">Reset Game</button>
+
+    <script src="script.js"></script>
+</body>
+</html>

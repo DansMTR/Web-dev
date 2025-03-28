@@ -1,0 +1,81 @@
+// Get elements
+const player1ChoiceDisplay = document.getElementById("player1-choice");
+const player2ChoiceDisplay = document.getElementById("player2-choice");
+const resultDisplay = document.getElementById("result");
+const player1ScoreDisplay = document.getElementById("player1-score");
+const player2ScoreDisplay = document.getElementById("player2-score");
+const turnInfo = document.getElementById("turn-info");
+const resetButton = document.getElementById("reset");
+
+const choices = ["Rock", "Paper", "Scissors"];
+let player1Choice = "";
+let player2Choice = "";
+let player1Score = 0;
+let player2Score = 0;
+let currentPlayer = 1; // Start with Player 1
+
+// Get buttons and add event listeners
+document.getElementById("paper").addEventListener("click", () => makeChoice("Paper"));
+document.getElementById("rock").addEventListener("click", () => makeChoice("Rock"));
+document.getElementById("scissors").addEventListener("click", () => makeChoice("Scissors"));
+resetButton.addEventListener("click", resetGame);
+
+// Function to handle player choices
+function makeChoice(choice) {
+    if (currentPlayer === 1) {
+        player1Choice = choice;
+        player1ChoiceDisplay.textContent = "❔"; // Hide Player 1's choice
+        turnInfo.textContent = "Player 2, make your choice!";
+        currentPlayer = 2; // Switch to Player 2
+    } else {
+        player2Choice = choice;
+        player2ChoiceDisplay.textContent = player2Choice;
+
+        // Reveal Player 1's choice after Player 2 selects
+        player1ChoiceDisplay.textContent = player1Choice;
+        
+        determineWinner(); // Decide winner
+    }
+}
+
+// Function to determine winner
+function determineWinner() {
+    let result;
+    if (player1Choice === player2Choice) {
+        result = "It's a Draw!";
+    } else if (
+        (player1Choice === "Rock" && player2Choice === "Scissors") ||
+        (player1Choice === "Paper" && player2Choice === "Rock") ||
+        (player1Choice === "Scissors" && player2Choice === "Paper")
+    ) {
+        result = "Player 1 Wins!";
+        player1Score++;
+    } else {
+        result = "Player 2 Wins!";
+        player2Score++;
+    }
+
+    // Update result and scores
+    resultDisplay.textContent = result;
+    player1ScoreDisplay.textContent = player1Score;
+    player2ScoreDisplay.textContent = player2Score;
+
+    // Reset for next round
+    currentPlayer = 1;
+    turnInfo.textContent = "Player 1, make your choice!";
+}
+
+// Function to reset the game
+function resetGame() {
+    player1Score = 0;
+    player2Score = 0;
+    player1Choice = "";
+    player2Choice = "";
+    player1ChoiceDisplay.textContent = "?";
+    player2ChoiceDisplay.textContent = "?";
+    resultDisplay.textContent = "?";
+    player1ScoreDisplay.textContent = "0";
+    player2ScoreDisplay.textContent = "0";
+    turnInfo.textContent = "Player 1, make your choice!";
+    currentPlayer = 1;
+}

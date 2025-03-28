@@ -1,0 +1,89 @@
+/* Apply styles to the whole page */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #282c36;
+    color: white;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Style the game buttons */
+button {
+    font-size: 18px;
+    padding: 12px 20px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#paper {
+    background-color: #3498db;
+    color: white;
+}
+
+#rock {
+    background-color: #ff6666;
+    color: white;
+}
+
+#scissors {
+    background-color: #f4a261;
+    color: white;
+}
+
+#reset {
+    background-color: #333;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: block;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+#reset:hover {
+    background-color: #ff4757;
+    color: white;
+}
+
+/* Style the result text with an animation */
+h2 span {
+    font-size: 22px;
+    font-weight: bold;
+    display: inline-block;
+    min-width: 100px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Animation for results */
+.win {
+    color: #4caf50;
+    animation: pop 0.5s ease-in-out;
+}
+
+.lose {
+    color: #e74c3c;
+}
+
+.draw {
+    color: #555;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}

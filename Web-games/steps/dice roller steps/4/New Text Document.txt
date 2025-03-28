@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roller Dice Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #005f73;
+        }
+
+        #diceResult {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        #diceImage {
+            width: 100px;
+            height: 100px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Roller Dice Game</h1>
+    <button id="rollDiceBtn">Roll the Dice</button>
+    <p id="diceResult">🎲 Roll to see your number!</p>
+    <img id="diceImage" src="dice1.png" alt="Dice Image">
+
+    <script>
+        document.getElementById("rollDiceBtn").addEventListener("click", function() {
+            let diceRoll = Math.floor(Math.random() * 6) + 1; // Generate random number between 1-6
+            document.getElementById("diceResult").textContent = "You rolled a " + diceRoll + "!";
+            document.getElementById("diceImage").src = "dice" + diceRoll + ".png"; // Change dice image
+        });
+    </script>
+</body>
+</html>

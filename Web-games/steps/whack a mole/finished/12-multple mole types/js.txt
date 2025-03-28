@@ -1,0 +1,478 @@
+// Select all moles and holes
+const holes = document.querySelectorAll('.hole');
+const moles = document.querySelectorAll('.mole');
+const startButton = document.getElementById('start-button');
+const scoreDisplay = document.getElementById('score');
+const timerDisplay = document.getElementById('timer');
+const gameOverScreen = document.getElementById('game-over-screen');
+const retryButton = document.getElementById('retry-button');
+const finalTimeDisplay = document.getElementById('final-time');
+const historyContainer = document.getElementById('history-container');
+let score = 0;
+let isGameRunning = false;
+let isPaused = false;
+let gameTimeout;
+let lastHole;
+let timerInterval;
+let gameTime = 0;
+let gameCount = 0;
+let scoreHistory = [];
+let remainingTime = 30000; // 30 seconds in milliseconds
+let pauseStartTime;
+let lives = 5; // Initialize with 5 lives
+let livesDisplay; // Will hold the lives display element
+let currentDifficulty = 'medium'; // Default difficulty
+let difficultySettings = {
+    easy: {
+        minTime: 1000,  // Minimum time mole stays up (ms)
+        maxTime: 2000,  // Maximum time mole stays up (ms)
+        gameLength: 40000, // 40 seconds in milliseconds
+        lives: 7
+    },
+    medium: {
+        minTime: 600,
+        maxTime: 1600,
+        gameLength: 30000, // 30 seconds in milliseconds
+        lives: 5
+    },
+    hard: {
+        minTime: 400,
+        maxTime: 1000,
+        gameLength: 25000, // 25 seconds in milliseconds
+        lives: 3
+    }
+};
+// Create the pause button
+const pauseButton = document.createElement('button');
+pauseButton.id = 'pause-button';
+pauseButton.textContent = 'Pause';
+pauseButton.disabled = true;
+
+// Add the pause button to the game info section
+document.querySelector('.game-info').appendChild(pauseButton);
+
+// Create lives display
+const createLivesDisplay = () => {
+    livesDisplay = document.createElement('p');
+    livesDisplay.innerHTML = `Lives: <span id="lives">${lives}</span>`;
+    livesDisplay.classList.add('lives-display');
+    
+    // Add life icons
+    const livesIcons = document.createElement('div');
+    livesIcons.id = 'lives-icons';
+    livesIcons.classList.add('lives-icons');
+    
+    for (let i = 0; i < 5; i++) {
+        const lifeIcon = document.createElement('span');
+        lifeIcon.classList.add('life-icon');
+        lifeIcon.innerHTML = '❤️';
+        livesIcons.appendChild(lifeIcon);
+    }
+    
+    livesDisplay.appendChild(livesIcons);
+    
+    // Add to game info section before the start button
+    document.querySelector('.game-info').insertBefore(livesDisplay, startButton);
+};
+
+// Update the lives display
+function updateLivesDisplay() {
+    document.getElementById('lives').textContent = lives;
+    
+    // Update the heart icons
+    const lifeIcons = document.querySelectorAll('.life-icon');
+    lifeIcons.forEach((icon, index) => {
+        if (index < lives) {
+            icon.innerHTML = '❤️'; // Full heart
+            icon.classList.remove('lost');
+        } else {
+            icon.innerHTML = '🖤'; // Empty heart
+            icon.classList.add('lost');
+        }
+    });
+}
+
+// Function to lose a life
+function loseLife() {
+    lives--;
+    updateLivesDisplay();
+    
+    // Visual feedback
+    const gameBoard = document.querySelector('.game-board');
+    gameBoard.classList.add('life-lost');
+    
+    // Add screen flash effect
+    const flash = document.createElement('div');
+    flash.style.position = 'fixed';
+    flash.style.top = '0';
+    flash.style.left = '0';
+    flash.style.width = '100%';
+    flash.style.height = '100%';
+    flash.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
+    flash.style.pointerEvents = 'none';
+    flash.style.zIndex = '9999';
+    flash.style.opacity = '1';
+    flash.style.transition = 'opacity 0.3s ease-out';
+    document.body.appendChild(flash);
+    
+    setTimeout(() => {
+        flash.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(flash);
+        }, 300);
+    }, 50);
+    
+    setTimeout(() => {
+        gameBoard.classList.remove('life-lost');
+    }, 300);
+    
+    // Check if game over
+    if (lives <= 0) {
+        endGame();
+    }
+}
+// Update the history display
+function updateHistoryDisplay() {
+    // Clear the history container
+    historyContainer.innerHTML = '';
+    
+    if (scoreHistory.length === 0) {
+        historyContainer.innerHTML = '<p class="empty-history">No games played yet</p>';
+        return;
+    }
+    
+    // Add each history entry
+    scoreHistory.forEach((entry, index) => {
+        const historyEntry = document.createElement('div');
+        historyEntry.className = 'history-entry';
+        historyEntry.innerHTML = `
+            <p class="entry-number">Game #${entry.gameNumber}</p>
+            <p class="entry-score">Score: ${entry.score}</p>
+            <p class="entry-time">Time: ${entry.time}</p>
+            <p class="entry-lives">Lives: ${entry.livesLeft}/5</p>
+        `;
+        historyContainer.appendChild(historyEntry);
+    });
+    
+    // Scroll to the bottom to show the latest entry
+    historyContainer.scrollTop = historyContainer.scrollHeight;
+}
+
+// Function to get a random hole (but not the same one twice in a row)
+function getRandomHole() {
+    const index = Math.floor(Math.random() * holes.length);
+    const hole = holes[index];
+    
+    // Avoid the same hole twice in a row
+    if (hole === lastHole) {
+        return getRandomHole();
+    }
+    
+    lastHole = hole;
+    return hole;
+}
+
+// Function to make a random mole appear
+function showRandomMole() {
+    // Only run if game is active and not paused
+    if (!isGameRunning || isPaused) return;
+    
+    // Get a random hole
+    const hole = getRandomHole();
+    const mole = hole.querySelector('.mole');
+    
+    // Make the mole appear with animation
+    mole.classList.add('up');
+    
+    // Set a timeout to hide the mole again based on difficulty
+    const settings = difficultySettings[currentDifficulty];
+    const hideTime = Math.random() * (settings.maxTime - settings.minTime) + settings.minTime;
+    
+    setTimeout(() => {
+        // If mole was not whacked, it's a miss
+        if (mole.classList.contains('up') && isGameRunning && !isPaused) {
+            mole.classList.remove('up');
+            // Only lose a life if the mole disappears unwhacked
+            loseLife();
+        } else {
+            mole.classList.remove('up');
+        }
+        
+        // If game is still running and not paused, show another mole
+        if (isGameRunning && !isPaused) {
+            showRandomMole();
+        }
+    }, hideTime);
+}
+
+
+// Function to update the timer display
+function updateTimer() {
+    if (isPaused) return;
+    
+    gameTime++;
+    const seconds = gameTime % 60;
+    const minutes = Math.floor(gameTime / 60);
+    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Function to handle whacking a mole
+function whack(e) {
+    if (!isGameRunning || isPaused) return;
+    
+    // Stop the event from bubbling up to the hole
+    e.stopPropagation();
+    
+    // Add hit effect
+    this.classList.add('whacked');
+    setTimeout(() => {
+        this.classList.remove('whacked');
+    }, 200);
+    
+    score++;
+    scoreDisplay.textContent = score;
+    
+    // Animate score
+    animateScore();
+    
+    // Visual feedback that mole was hit
+    this.classList.remove('up');
+    
+    // Create and add impact effect
+    const impact = document.createElement('div');
+    impact.className = 'impact';
+    impact.style.position = 'absolute';
+    impact.style.top = '50%';
+    impact.style.left = '50%';
+    impact.style.transform = 'translate(-50%, -50%)';
+    impact.style.width = '60%';
+    impact.style.height = '60%';
+    impact.style.borderRadius = '50%';
+    impact.style.backgroundColor = 'rgba(255, 255, 0, 0.3)';
+    impact.style.animation = 'hit-effect 0.5s ease-out forwards';
+    this.parentNode.appendChild(impact);
+    
+    // Remove impact effect after animation completes
+    setTimeout(() => {
+        if (impact.parentNode) {
+            impact.parentNode.removeChild(impact);
+        }
+    }, 500);
+    
+    // Prevent multiple clicks on the same mole
+    this.style.pointerEvents = 'none';
+    setTimeout(() => {
+        this.style.pointerEvents = 'auto';
+    }, 300);
+}
+// Function to handle clicking on a hole
+function clickHole(e) {
+    if (!isGameRunning || isPaused) return;
+    
+    // We don't need to end the game on hole click anymore
+    // Instead, clicking on an empty hole does nothing
+}
+
+// Function to end the game
+function endGame() {
+    isGameRunning = false;
+    isPaused = false;
+    
+    // Clear any pending timeouts and intervals
+    clearTimeout(gameTimeout);
+    clearInterval(timerInterval);
+    
+    // Format the final time
+    const finalTime = timerDisplay.textContent;
+    
+    // Show game over screen with animation
+    document.getElementById('final-score').textContent = score;
+    finalTimeDisplay.textContent = finalTime;
+    document.getElementById('final-lives').textContent = lives;
+    
+    // Add a slight delay before showing game over screen for better UX
+    setTimeout(() => {
+        gameOverScreen.classList.add('visible');
+    }, 300);
+    
+    // Add to score history
+    gameCount++;
+    scoreHistory.push({
+        gameNumber: gameCount,
+        score: score,
+        time: finalTime,
+        livesLeft: lives
+    });
+    
+    // Keep only the last 20 games per session
+    if (scoreHistory.length > 20) {
+        scoreHistory.shift();
+    }
+    
+    // Update history display
+    updateHistoryDisplay();
+    
+    // Reset buttons
+    startButton.disabled = false;
+    pauseButton.disabled = true;
+    pauseButton.textContent = 'Pause';
+    
+    // Remove animation from start button for cleaner look
+    startButton.style.animation = 'none';
+}
+// Function to toggle pause/resume game
+function togglePause() {
+    if (!isGameRunning) return;
+    
+    if (isPaused) {
+        // Resume game
+        isPaused = false;
+        pauseButton.textContent = 'Pause';
+        
+        // Restart the timer
+        timerInterval = setInterval(updateTimer, 1000);
+        
+        // Calculate remaining time
+        const pauseDuration = Date.now() - pauseStartTime;
+        remainingTime -= pauseDuration;
+        
+        // Resume mole appearances
+        showRandomMole();
+        
+        // Resume game timeout
+        gameTimeout = setTimeout(() => {
+            endGame();
+        }, remainingTime);
+    } else {
+        // Pause game
+        isPaused = true;
+        pauseButton.textContent = 'Resume';
+        
+        // Pause the timer
+        clearInterval(timerInterval);
+        
+        // Record when we paused
+        pauseStartTime = Date.now();
+        
+        // Clear timeout
+        clearTimeout(gameTimeout);
+        
+        // Hide any visible moles
+        moles.forEach(mole => {
+            mole.classList.remove('up');
+        });
+    }
+}
+
+// Add this function to show the difficulty selector
+function showDifficultySelector() {
+    // Hide game over screen if visible
+    gameOverScreen.classList.remove('visible');
+    
+    const difficultySelector = document.querySelector('.difficulty-selector');
+    difficultySelector.classList.add('active');
+    
+    // Pre-select the current difficulty
+    const buttons = document.querySelectorAll('.difficulty-btn');
+    buttons.forEach(btn => {
+        if (btn.dataset.difficulty === currentDifficulty) {
+            btn.classList.add('selected');
+        } else {
+            btn.classList.remove('selected');
+        }
+    });
+}
+
+// Add this function to hide the difficulty selector
+function hideDifficultySelector() {
+    const difficultySelector = document.querySelector('.difficulty-selector');
+    difficultySelector.classList.remove('active');
+}
+
+
+
+
+
+
+
+// Start game function
+function startGame() {
+    // Hide difficulty selector
+    hideDifficultySelector();
+    
+    // Hide game over screen if visible
+    gameOverScreen.classList.remove('visible');
+    
+    // Get settings for current difficulty
+    const settings = difficultySettings[currentDifficulty];
+    
+    // Reset score, timer, and set lives based on difficulty
+    score = 0;
+    gameTime = 0;
+    isPaused = false;
+    lives = settings.lives; // Set lives based on difficulty
+    remainingTime = settings.gameLength; // Set game length based on difficulty
+    scoreDisplay.textContent = score;
+    timerDisplay.textContent = "00:00";
+    updateLivesDisplay(); // Update the lives display
+    
+    isGameRunning = true;
+    startButton.disabled = true;
+    pauseButton.disabled = false;
+    pauseButton.textContent = 'Pause';
+    
+    // Start the timer
+    timerInterval = setInterval(updateTimer, 1000);
+    
+    // Start showing moles
+    showRandomMole();
+    
+    // Set game length based on difficulty
+    gameTimeout = setTimeout(() => {
+        endGame();
+    }, remainingTime);
+}
+
+// Add event listeners
+
+pauseButton.addEventListener('click', togglePause);
+moles.forEach(mole => mole.addEventListener('click', whack));
+holes.forEach(hole => hole.addEventListener('click', clickHole));
+// Modify the startButton event listener
+startButton.addEventListener('click', showDifficultySelector);
+
+// Make retry button also show difficulty selector
+retryButton.addEventListener('click', showDifficultySelector);
+
+// Add event listeners for difficulty buttons
+document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Update selected button visually
+        document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        
+        // Set the difficulty
+        currentDifficulty = this.dataset.difficulty;
+        
+        // Start the game
+        startGame();
+    });
+});
+// Initialize the empty history when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    scoreHistory = [];
+    gameCount = 0;
+    createLivesDisplay(); // Create the lives display
+    updateLivesDisplay(); // Initialize lives display
+    updateHistoryDisplay();
+});
+
+function animateScore() {
+    const scoreElement = document.getElementById('score');
+    scoreElement.classList.add('score-animated');
+    
+    // Remove the class after animation completes
+    setTimeout(() => {
+        scoreElement.classList.remove('score-animated');
+    }, 300);
+}

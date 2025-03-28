@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whack-a-Mole</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Whack-a-Mole</h1>
+        <div class="game-layout">
+            <div class="score-history">
+                <h2>Score History</h2>
+                <div class="history-container" id="history-container">
+                    <p class="empty-history">No games played yet</p>
+                </div>
+            </div>
+            <div class="game-wrapper">
+                <div class="game-info">
+                    <p>Score: <span id="score">0</span></p>
+                    <p>Time: <span id="timer">00:00</span></p>
+                    <button id="start-button">Start Game</button>
+                </div>
+                <!-- Add this right after the game-info div opening tag in index.html -->
+<div class="difficulty-selector">
+    <p>Difficulty:</p>
+    <div class="difficulty-buttons">
+        <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+        <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+        <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+    </div>
+</div>
+                <div class="game-board">
+                    <div class="hole" id="hole0"><div class="mole"></div></div>
+                    <div class="hole" id="hole1"><div class="mole"></div></div>
+                    <div class="hole" id="hole2"><div class="mole"></div></div>
+                    <div class="hole" id="hole3"><div class="mole"></div></div>
+                    <div class="hole" id="hole4"><div class="mole"></div></div>
+                    <div class="hole" id="hole5"><div class="mole"></div></div>
+                    <div class="hole" id="hole6"><div class="mole"></div></div>
+                    <div class="hole" id="hole7"><div class="mole"></div></div>
+                    <div class="hole" id="hole8"><div class="mole"></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="game-over-screen" class="game-over">
+            <!-- Update the game-over-content section in your index.html -->
+<div class="game-over-content">
+    <h2>Game Over!</h2>
+    <p>Your score: <span id="final-score">0</span></p>
+    <p>Time played: <span id="final-time">00:00</span></p>
+    <p class="lives-info">Lives remaining: <span id="final-lives">0</span>/5</p>
+    <button id="retry-button">Retry</button>
+</div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

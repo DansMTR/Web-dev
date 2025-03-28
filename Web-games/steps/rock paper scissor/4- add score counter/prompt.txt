@@ -1,0 +1,1 @@
+Enhance the JavaScript logic to include a score counter. Track both the player’s and computer’s scores. Each time a round is played, update the corresponding score based on who wins. Display the updated scores dynamically on the webpage. Test the game to ensure the scores update correctly after each round.

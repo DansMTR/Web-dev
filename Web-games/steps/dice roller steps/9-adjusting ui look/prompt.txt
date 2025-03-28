@@ -1,0 +1,1 @@
+Edit the code of a dice roller project to enhance the UI by adding a gradient background for a sleek look , implementing a 3D hover effect for buttons , and adding a dice shake animation when rolling . Display scores using card-based UI elements for a modern feel , and make the winning message glow for added emphasis .

@@ -1,0 +1,13 @@
+ <h1>Two-Player Dice Game 🎲</h1>
+    <p id="playerTurn">Player 1's Turn</p>
+    <button id="rollDiceBtn">🎲 Roll the Dice</button>
+    <button id="resetBtn">🔄 Reset Game</button>
+    <p id="diceResult">🎲 Roll to see your number!</p>
+    <img id="diceImage" src="dice1.png" alt="Dice Image">
+    
+    <div class="score-board">
+        <div class="score-card" id="score1">Player 1 Score: 0</div>
+        <div class="score-card" id="score2">Player 2 Score: 0</div>
+    </div>
+    
+    <p id="winner"></p>

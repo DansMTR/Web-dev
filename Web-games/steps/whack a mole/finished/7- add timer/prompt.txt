@@ -1,0 +1,6 @@
+Edit the code of a whack-a-mole project to add a timer. In the HTML, add a timer display in the game info area and on the game over screen. In JavaScript, implement an updateTimer() function with an interval to update the timer every second, displaying the final time when the game ends. Ensure the timer resets when starting a new game. Style the timer in CSS for better visibility and responsiveness.
+
+
+
+
+

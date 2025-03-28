@@ -1,0 +1,5 @@
+Memory Card Game - Match pairs of cards by flipping them over
+Whack-a-Mole - Click on moles as they randomly appear in different holes
+Snake Game - Control a snake to eat food and grow without hitting walls or itself
+Word Guessing Game (Hangman style) - Guess a hidden word one letter at a time
+Quiz Game - Answer multiple-choice questions with a timer

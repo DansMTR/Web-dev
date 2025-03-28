@@ -1,0 +1,1 @@
+Edit the code of a dice roller project to track two players by alternating turns. Implement separate score variables for Player 1 and Player 2, display whose turn it is at the top of the screen, and update the scores accordingly. Add a reset button to allow players to reset the game at any time, clearing scores and restoring the initial state.

@@ -1,0 +1,1 @@
+Edit the code of a whack-a-mole project to add a retry feature. In the HTML, add a retry button with the ID "retry-button" within the game over screen. In JavaScript, select the retry button and add an event listener that calls the startGame() function. Clicking the retry button will hide the game over screen, reset the score to 0, and start a new game.

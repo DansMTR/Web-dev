@@ -1,0 +1,1 @@
+Add a reset button to the Rock, Paper, Scissors game. When clicked, it should reset the player's choice, the computer's choice, the result, and both scores to zero. Update the JavaScript to handle this functionality. Test the reset feature to ensure it properly restarts the game.

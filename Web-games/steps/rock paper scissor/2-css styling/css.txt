@@ -1,0 +1,54 @@
+/* Apply basic styling */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Style the game title */
+h1 {
+    color: #333;
+}
+
+/* Style buttons */
+button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+/* Different colors for each button */
+#rock {
+    background-color: #ff6666;
+    color: white;
+}
+#paper {
+    background-color: #66ccff;
+    color: white;
+}
+#scissors {
+    background-color: #66ff66;
+    color: white;
+}
+
+/* Button hover effects */
+button:hover {
+    opacity: 0.8;
+}
+
+/* Style the result section */
+h2 {
+    margin-top: 20px;
+    color: #333;
+}
+
+span {
+    font-weight: bold;
+    color: #ff6600;
+}

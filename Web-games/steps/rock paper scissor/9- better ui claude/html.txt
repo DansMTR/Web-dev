@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>Rock Paper Scissors</h1>
+            <p class="subtitle">Choose your move wisely!</p>
+        </div>
+
+        <!-- Mode Selection -->
+        <div class="mode-selection">
+            <h2>Select Game Mode</h2>
+            <div class="mode-buttons">
+                <button id="pvp-mode" class="mode-btn">
+                    <i class="fas fa-user-friends"></i> Two Players
+                </button>
+                <button id="pvc-mode" class="mode-btn">
+                    <i class="fas fa-robot"></i> Vs Computer
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Instructions -->
+        <div class="game-status">
+            <h3 id="turn-info">Choose a mode to start!</h3>
+        </div>
+
+        <!-- Game Area -->
+        <div id="game-area" class="hidden">
+            <!-- Game Controls -->
+            <div class="game-controls">
+                <button id="rock" class="choice-btn">
+                    <i class="far fa-hand-rock"></i>
+                    <span>Rock</span>
+                </button>
+                <button id="paper" class="choice-btn">
+                    <i class="far fa-hand-paper"></i>
+                    <span>Paper</span>
+                </button>
+                <button id="scissors" class="choice-btn">
+                    <i class="far fa-hand-scissors"></i>
+                    <span>Scissors</span>
+                </button>
+            </div>
+
+            <!-- Game Info -->
+            <div class="game-info">
+                <div class="choices-display">
+                    <div class="player-choice">
+                        <h4>Player 1</h4>
+                        <div id="player1-choice" class="choice-icon">?</div>
+                    </div>
+                    <div class="vs-divider">VS</div>
+                    <div class="player-choice">
+                        <h4 id="player2-name">Player 2</h4>
+                        <div id="player2-choice" class="choice-icon">?</div>
+                    </div>
+                </div>
+
+                <div class="result-container">
+                    <h3 id="result-label">Result: <span id="result" class="result-text">?</span></h3>
+                </div>
+
+                <!-- Scoreboard -->
+                <div class="scoreboard">
+                    <h3>Score</h3>
+                    <div class="score-container">
+                        <div class="score-item">
+                            <div class="score-label">Player 1</div>
+                            <div id="player1-score" class="score-value">0</div>
+                        </div>
+                        <div class="score-item">
+                            <div id="player2-score-label" class="score-label">Player 2</div>
+                            <div id="player2-score" class="score-value">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reset Button -->
+            <button id="reset" class="reset-btn">
+                <i class="fas fa-sync-alt"></i> Reset Game
+            </button>
+        </div>
+    </div>
+
+   
+
+    <script src="script.js"></script>
+</body>
+</html>
